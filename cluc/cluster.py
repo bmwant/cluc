@@ -3,6 +3,8 @@ from contextlib import suppress
 import oca
 from oca.pool import WrongIdError, WrongNameError
 
+from cluc.utils import load_credentials, load_endpoint
+
 
 class ClusterManager(object):
 
@@ -13,6 +15,16 @@ class ClusterManager(object):
         self.username = username
         self.password = password
         self.endpoint = endpoint
+        self._ensure_account_data()
+
+    def _ensure_account_data(self):
+        if not self.username or not self.password:
+            creds = load_credentials()
+            self.username = creds.username
+            self.password = creds.password
+
+        if not self.endpoint:
+            self.endpoint = load_endpoint()
 
     def get_vm_by_id(self, vm_id):
         with suppress(WrongIdError):
