@@ -60,6 +60,10 @@ class ClusterManager(ClusterBase):
         with suppress(WrongNameError):
             return self.vm_pool.get_by_name(vm_name)
 
+    def get_template_by_name(self, template_name):
+        with suppress(WrongNameError):
+            return self.templates_pool.get_by_name(template_name)
+
     def list_vms(self) -> list:
         vms_desc = []
         for vm in self.vm_pool:
@@ -72,6 +76,7 @@ class ClusterManager(ClusterBase):
     def list_templates(self) -> list:
         templates_desc = []
         for template in self.templates_pool:
+            import pdb; pdb.set_trace()
             desc = '{} {}'.format(template.id, template.name)
             templates_desc.append(desc)
         return templates_desc

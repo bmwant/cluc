@@ -12,8 +12,8 @@ def cli():
 
 
 @cli.command(
-    name='list',
-    help='List all of your currently running VMs'
+    name='vms',
+    help='List all of your created VMs'
 )
 @requires_creds
 def list_vms():
@@ -23,13 +23,13 @@ def list_vms():
 
 
 @cli.command(
-    name='tmpl',
-    help=''
+    name='templates',
+    help='List all of your created templates'
 )
 @requires_creds
 def list_vms():
-    cinfo = ClusterManager()
-    templates = cinfo.list_templates()
+    cmgr = ClusterManager()
+    templates = cmgr.list_templates()
     click.echo('\n'.join(templates))
 
 
@@ -39,10 +39,15 @@ def list_vms():
 )
 @requires_creds
 def create_vm():
-    from PyInquirer import prompt, Token, style_from_dict
-    from cluc.questions import questions_create
-    answ = prompt(questions_create)
-    print(answ)
+    # from PyInquirer import prompt, Token, style_from_dict
+    # from cluc.questions import questions_create
+    # answ = prompt(questions_create)
+    # print(answ)
+
+    cmgr = ClusterManager()
+    template = cmgr.get_template_by_name('misha-immunify360-cpanel-11.66-cloudlinux-7.4')
+    res = template.instantiate(name='It is my name')
+    print(res)
 
 
 @cli.command(
