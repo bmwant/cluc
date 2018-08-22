@@ -3,12 +3,12 @@
 ClusterCreator
 
 
-### List instances
+#### List instances
 ```
 $ cluc list
 ```
 
-### Terminate instance
+#### Terminate instance
 ```
 $ cluc terminate --id <vm-id>
 ```

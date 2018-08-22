@@ -12,14 +12,6 @@ def cli():
 
 
 @cli.command(
-    name='init'
-)
-def init():
-    from cluc.cli_utils import init_credentials
-    init_credentials()
-
-
-@cli.command(
     name='list',
     help='List all of your currently running VMs'
 )
@@ -34,8 +26,12 @@ def list_vms():
     name='create',
     help='Create a virtual machine',
 )
+@requires_creds
 def create_vm():
-    pass
+    from PyInquirer import prompt, Token, style_from_dict
+    from cluc.questions import questions_create
+    answ = prompt(questions_create)
+    print(answ)
 
 
 @cli.command(
@@ -52,6 +48,7 @@ def create_vm():
     'vm_name',
     type=str,
 )
+@requires_creds
 def terminate_vm(vm_id, vm_name):
     if vm_id is not None and vm_name is not None:
         raise UsageError('Provide either VM id or VM name')
