@@ -23,6 +23,17 @@ def list_vms():
 
 
 @cli.command(
+    name='tmpl',
+    help=''
+)
+@requires_creds
+def list_vms():
+    cinfo = ClusterManager()
+    templates = cinfo.list_templates()
+    click.echo('\n'.join(templates))
+
+
+@cli.command(
     name='create',
     help='Create a virtual machine',
 )
