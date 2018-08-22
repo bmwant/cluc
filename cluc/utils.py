@@ -4,7 +4,10 @@ import os
 def create_dirs(path):
     full_path = os.path.abspath(os.path.expanduser(path))
 
-    dir_path = full_path if not os.path.isfile(full_path) \
-        else os.path.dirname(full_path)
+    if full_path.endswith('/'):  # it's definitely a directory
+        dir_path = full_path
+    else:
+        # path to a file provided, so create a directory container for it
+        dir_path = os.path.dirname(full_path)
 
     os.makedirs(dir_path, exist_ok=True)

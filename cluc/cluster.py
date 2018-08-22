@@ -8,11 +8,11 @@ class ClusterManager(object):
 
     _client = None  # Reuse client within a process
 
-    def __init__(self):
+    def __init__(self, *, username=None, password=None, endpoint=None):
         self._vm_pool = None
-        self.username = ''
-        self.password = ''
-        self.endpoint = ''
+        self.username = username
+        self.password = password
+        self.endpoint = endpoint
 
     def get_vm_by_id(self, vm_id):
         with suppress(WrongIdError):
@@ -46,5 +46,5 @@ class ClusterManager(object):
                 '{}:{}'.format(self.username, self.password),
                 self.endpoint
             )
-            
+
         return self._client

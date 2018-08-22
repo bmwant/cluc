@@ -1,8 +1,8 @@
 import click
 from click import UsageError, BadParameter
 
-from cluc.cluster import ClusterInfo
-from cluc.cli_utils import info
+from cluc.cluster import ClusterManager
+from cluc.cli_utils import info, requires_creds
 
 
 @click.group()
@@ -23,9 +23,11 @@ def init():
     name='list',
     help='List all of your currently running VMs'
 )
+@requires_creds
 def list_vms():
-    cinfo = ClusterInfo()
-    cinfo.list_vms()
+    cinfo = ClusterManager()
+    vms = cinfo.list_vms()
+    click.echo('\n'.join(vms))
 
 
 @cli.command(
@@ -54,7 +56,7 @@ def terminate_vm(vm_id, vm_name):
     if vm_id is not None and vm_name is not None:
         raise UsageError('Provide either VM id or VM name')
 
-    cmgr = ClusterInfo()
+    cmgr = ClusterManager()
     if vm_id is not None:
         vm = cmgr.get_vm_by_id(vm_id)
         if vm is None:

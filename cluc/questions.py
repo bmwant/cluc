@@ -10,3 +10,11 @@ questions_credentials = [
         'message': 'Enter your password',
     },
 ]
+
+questions_endpoint = [
+    {
+        'type': 'input',
+        'name': 'endpoint',
+        'message': 'Enter RPC endpoint',
+    },
+]
