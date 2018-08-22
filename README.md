@@ -5,7 +5,12 @@ ClusterCreator
 
 #### List instances
 ```
-$ cluc list
+$ cluc vms
+```
+
+#### List templates
+```
+$ cluc templates
 ```
 
 #### Terminate instance
@@ -16,3 +21,14 @@ or terminate by its name
 ```
 $ cluc terminate --name <vm-name>
 ```
+
+
+### Development
+```
+$ mkvirtualenv -p python3 cluc
+$ pip install -rx requirements.txt
+```
+
+### Say thanks
+
+[Donate less than 1$ here](https://gimmebackmyson.herokuapp.com/)
