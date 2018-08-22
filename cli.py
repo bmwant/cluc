@@ -12,6 +12,14 @@ def cli():
 
 
 @cli.command(
+    name='init'
+)
+def init():
+    from cluc.cli_utils import init_credentials
+    init_credentials()
+
+
+@cli.command(
     name='list',
     help='List all of your currently running VMs'
 )
