@@ -3,11 +3,24 @@ from click import UsageError, BadParameter
 
 from cluc.cluster import ClusterManager
 from cluc.cli_utils import info, requires_creds
+from cluc.tables import Table
 
 
 @click.group()
 @click.version_option()
 def cli():
+    pass
+
+
+@cli.command(
+    name='sync',
+    help='',
+)
+@click.option(
+    '--dest',
+    help='Location on target machine where to sync current directory',
+)
+def sync_directory(dest):
     pass
 
 
@@ -27,10 +40,12 @@ def list_vms():
     help='List all of your created templates'
 )
 @requires_creds
-def list_vms():
+def list_templates():
     cmgr = ClusterManager()
     templates = cmgr.list_templates()
-    click.echo('\n'.join(templates))
+    header = ['#ID', 'Name']
+    table = Table(header=header, data=templates)
+    table.print()
 
 
 @cli.command(

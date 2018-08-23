@@ -76,9 +76,7 @@ class ClusterManager(ClusterBase):
     def list_templates(self) -> list:
         templates_desc = []
         for template in self.templates_pool:
-            import pdb; pdb.set_trace()
-            desc = '{} {}'.format(template.id, template.name)
-            templates_desc.append(desc)
+            templates_desc.append([template.id, template.name])
         return templates_desc
 
     def get_template_id_by_name(self, template_name):
