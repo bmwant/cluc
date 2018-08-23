@@ -32,7 +32,9 @@ def sync_directory(dest):
 def list_vms():
     cinfo = ClusterManager()
     vms = cinfo.list_vms()
-    click.echo('\n'.join(vms))
+    header = ['#ID', 'Name', 'IP', 'State']
+    table = Table(header=header, data=vms)
+    table.print()
 
 
 @cli.command(

@@ -68,9 +68,8 @@ class ClusterManager(ClusterBase):
         vms_desc = []
         for vm in self.vm_pool:
             ip_list = ', '.join(v.ip for v in vm.template.nics)
-            desc = '{} {} {}'.format(vm.name, ip_list, vm.str_state)
-            # print("{} {} {} (memory: {} MB)".format(vm.name, ip_list, vm.str_state, vm.template.memory))\
-            vms_desc.append(desc)
+            # vm.name, ip_list, vm.str_state, vm.template.memory))
+            vms_desc.append([vm.id, vm.name, ip_list, vm.str_state])
         return vms_desc
 
     def list_templates(self) -> list:
