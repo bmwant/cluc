@@ -39,12 +39,13 @@ def sync_directory(src, dest):
 
 @cli.command(
     name='vms',
-    help='List all of your created VMs'
+    help='List of your (all) created VMs'
 )
+@cli_options.show_all
 @requires_creds
-def list_vms():
+def list_vms(show_all):
     cinfo = ClusterManager()
-    vms = cinfo.list_vms()
+    vms = cinfo.list_vms(show_all=show_all)
     header = ['#ID', 'Name', 'IP', 'State']
     table = Table(header=header, data=vms)
     table.print()
@@ -52,12 +53,13 @@ def list_vms():
 
 @cli.command(
     name='templates',
-    help='List all of your created templates'
+    help='List of your (all) created templates'
 )
+@cli_options.show_all
 @requires_creds
-def list_templates():
+def list_templates(show_all):
     cmgr = ClusterManager()
-    templates = cmgr.list_templates()
+    templates = cmgr.list_templates(show_all=show_all)
     header = ['#ID', 'Name']
     table = Table(header=header, data=templates)
     table.print()

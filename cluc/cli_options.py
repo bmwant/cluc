@@ -12,3 +12,10 @@ vm_name = click.option(
     'vm_name',
     type=str,
 )
+
+show_all = click.option(
+    '--all',
+    'show_all',
+    is_flag=True,
+    default=False,
+)

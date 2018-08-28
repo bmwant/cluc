@@ -12,6 +12,7 @@ class ClusterBase(object):
     def __init__(self, *, username=None, password=None, endpoint=None):
         self._vm_pool = None
         self._templates_pool = None
+        self._filter = -3
         self.username = username
         self.password = password
         self.endpoint = endpoint
@@ -30,7 +31,7 @@ class ClusterBase(object):
         if self._vm_pool is None:
             self._vm_pool = oca.VirtualMachinePool(self.client)
         # Update information to retrieve latest data on each call
-        self._vm_pool.info()
+        self._vm_pool.info(filter=self._filter)
         return self._vm_pool
 
     @property
@@ -52,6 +53,9 @@ class ClusterBase(object):
 
 
 class ClusterManager(ClusterBase):
+
+    SHOW_ALL_FLAG = -2
+
     def get_vm_by_id(self, vm_id):
         with suppress(WrongIdError):
             return self.vm_pool.get_by_id(vm_id)
@@ -64,17 +68,36 @@ class ClusterManager(ClusterBase):
         with suppress(WrongNameError):
             return self.templates_pool.get_by_name(template_name)
 
-    def list_vms(self) -> list:
+    @staticmethod
+    def get_vm_ips(vm) -> list:
+        ips = []
+        for n in vm.template.nics:
+            if hasattr(n, 'ip'):
+                ips.append(n.ip)
+            elif hasattr(n, 'ip6'):
+                ips.append(n.ip6)
+            else:
+                # logger error
+                print('Bad NIC %s' % n)
+        return ips
+
+    def list_vms(self, show_all=False) -> list:
         vms_desc = []
-        for vm in self.vm_pool:
-            ip_list = ', '.join(v.ip for v in vm.template.nics)
+        pool = self.vm_pool
+        if show_all:
+            pool.info(filter=self.SHOW_ALL_FLAG)
+        for vm in pool:
+            ip_list = '\n'.join(self.get_vm_ips(vm))
             # vm.name, ip_list, vm.str_state, vm.template.memory))
             vms_desc.append([vm.id, vm.name, ip_list, vm.str_state])
         return vms_desc
 
-    def list_templates(self) -> list:
+    def list_templates(self, show_all=False) -> list:
         templates_desc = []
-        for template in self.templates_pool:
+        pool = self.templates_pool
+        if show_all:
+            pool.info(filter=self.SHOW_ALL_FLAG)
+        for template in pool:
             templates_desc.append([template.id, template.name])
         return templates_desc
 
