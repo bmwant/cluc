@@ -1,8 +1,13 @@
+import os
+
 import click
 from click import UsageError, BadParameter
 
+from cluc import cli_options
 from cluc.cluster import ClusterManager
-from cluc.cli_utils import info, requires_creds
+from cluc.helpers import info
+from cluc.cli_utils import requires_creds
+from cluc.utils import rsync_directory
 from cluc.tables import Table
 
 
@@ -17,11 +22,19 @@ def cli():
     help='',
 )
 @click.option(
-    '--dest',
-    help='Location on target machine where to sync current directory',
+    '--src',
+    help='Directory on local machine which will be synced',
+    type=click.Path(),
 )
-def sync_directory(dest):
-    pass
+@click.option(
+    '--dest',
+    required=True,
+    help='Location on target machine where to sync source directory',
+)
+def sync_directory(src, dest):
+    if src is None:
+        src = os.getcwd()
+    rsync_directory(src, '/vagrant/tmp')
 
 
 @cli.command(
@@ -68,19 +81,22 @@ def create_vm():
 
 
 @cli.command(
+    name='info',
+    help='Show information about virtual machine',
+)
+@cli_options.vm_id
+@cli_options.vm_name
+@requires_creds
+def info_vm(vm_id, vm_name):
+    pass
+
+
+@cli.command(
     name='terminate',
     help='Terminate a virtual machine',
 )
-@click.option(
-    '--id',
-    'vm_id',
-    type=int,
-)
-@click.option(
-    '--name',
-    'vm_name',
-    type=str,
-)
+@cli_options.vm_id
+@cli_options.vm_name
 @requires_creds
 def terminate_vm(vm_id, vm_name):
     if vm_id is not None and vm_name is not None:

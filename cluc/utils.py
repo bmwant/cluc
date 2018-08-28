@@ -1,8 +1,10 @@
 import os
+import subprocess
 
 import attr
 
 from cluc import settings
+from cluc.helpers import info, warn
 
 
 @attr.s
@@ -47,3 +49,27 @@ def load_endpoint():
         data = f.read().strip()
 
     return data
+
+
+def get_excludes(excludes: list) -> list:
+    return ['--exclude=%s' % ex for ex in excludes]
+
+
+def rsync_directory(src, dst, *, verbose=True):
+    destination = 'root@192.168.245.9:/vagrant/tmp'
+    cmd = [
+        'rsync', '-avrz', '--cvs-exclude',
+        *get_excludes(settings.DEFAULT_RSYNC_EXCLUDE),
+        src, destination
+    ]
+    res = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if res.returncode:
+        warn(res.stderr)
+        raise RuntimeError('Failed to sync directory')
+
+    if verbose:
+        info(res.stdout)

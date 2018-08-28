@@ -1,11 +1,11 @@
 import os
 from functools import wraps
 
-import click
 from PyInquirer import prompt, Token, style_from_dict
 
 from cluc import settings
 from cluc.utils import create_dirs
+from cluc.helpers import info
 from cluc.questions import questions_credentials, questions_endpoint
 
 
@@ -16,18 +16,6 @@ style = style_from_dict({
     Token.Answer: '#2196f3 bold',
     Token.Question: '',
 })
-
-
-def note(message):
-    click.secho(message, fg='green')
-
-
-def info(message):
-    click.secho(message, fg='yellow')
-
-
-def warn(message):
-    click.secho(message, fg='red')
 
 
 def init_credentials():
