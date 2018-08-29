@@ -13,7 +13,8 @@ from ansible.plugins.callback.default import CallbackModule
 from cluc import settings
 
 
-# since API is constructed for CLI it expects certain options to always be set, named tuple 'fakes' the args parsing options object
+# since API is constructed for CLI it expects certain options to always be set,
+# named tuple 'fakes' the args parsing options object
 Options = namedtuple('Options', [
     'connection',
     'module_path',
@@ -47,12 +48,13 @@ def main():
     loader.set_basedir('/home/user/cl/defence360/dev-utils/rpm-test')
 
     # create inventory, use path to host config file as source or hosts in a comma separated string
-    inventory = InventoryManager(loader=loader, sources='192.168.245.130,')
+    inventory = InventoryManager(loader=loader, sources='192.168.245.9,')
 
     # variable manager takes care of merging all the different sources to give you a unifed view of variables available in each context
     variable_manager = VariableManager(loader=loader, inventory=inventory)
     variable_manager.extra_vars = {
         'ssh_user': 'root',
+        'ansible_port': 22,
         # 'ansible_ssh_user': 'root',
         # 'ansible_ssh_private_key_file': "/home/user/.ssh/id_rsa",
         'build_system_repo_ids': '',  # check env
@@ -75,7 +77,6 @@ def main():
     # this will also automatically create the task objects from the info provided in play_source
     play = Play().load(play_source, variable_manager=variable_manager, loader=loader)
 
-    # Run it - instantiate task queue manager, which takes care of forking and setting up all objects to iterate over host list and tasks
     tqm = None
     try:
         tqm = TaskQueueManager(

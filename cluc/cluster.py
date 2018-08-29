@@ -6,6 +6,9 @@ from oca.pool import WrongIdError, WrongNameError
 from cluc.utils import load_credentials, load_endpoint
 
 
+__all__ = ('ClusterManager',)
+
+
 class ClusterBase(object):
     _client = None  # Reuse client within a process
 

@@ -4,7 +4,7 @@ import subprocess
 import attr
 
 from cluc import settings
-from cluc.helpers import info, warn
+from cluc.helpers import info, note, warn
 
 
 @attr.s
@@ -56,11 +56,12 @@ def get_excludes(excludes: list) -> list:
 
 
 def rsync_directory(src, dst, *, verbose=True):
-    destination = 'root@192.168.245.9:/vagrant/tmp'
+    source = os.path.join(src, '')  # ensure we copy content of the directory
+    destination = 'root@192.168.245.9:{remote_path}'.format(remote_path=dst)
     cmd = [
         'rsync', '-avrz', '--cvs-exclude',
         *get_excludes(settings.DEFAULT_RSYNC_EXCLUDE),
-        src, destination
+        source, destination
     ]
     res = subprocess.run(
         cmd,
@@ -73,3 +74,4 @@ def rsync_directory(src, dst, *, verbose=True):
 
     if verbose:
         info(res.stdout)
+        note('Copied %s to %s' % (source, destination))

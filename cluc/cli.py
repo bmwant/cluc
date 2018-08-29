@@ -1,12 +1,12 @@
 import os
 
 import click
-from click import UsageError, BadParameter
+from click import BadParameter
 
 from cluc import cli_options
 from cluc.cluster import ClusterManager
 from cluc.helpers import info
-from cluc.cli_utils import requires_creds
+from cluc.cli_utils import requires_creds, get_vm_by_alias, get_vm_info
 from cluc.utils import rsync_directory
 from cluc.tables import Table
 
@@ -34,7 +34,16 @@ def cli():
 def sync_directory(src, dest):
     if src is None:
         src = os.getcwd()
-    rsync_directory(src, '/vagrant/tmp')
+    rsync_directory(src, '/vagrant/')
+
+
+@cli.command(
+    name='provision',
+    help='',
+)
+def provision_vm():
+    from cluc.ansible_wrapper import main
+    main()
 
 
 @cli.command(
@@ -86,44 +95,31 @@ def create_vm():
     name='info',
     help='Show information about virtual machine',
 )
-@cli_options.vm_id
-@cli_options.vm_name
+@click.argument('vm_alias')
 @requires_creds
-def info_vm(vm_id, vm_name):
-    pass
+def info_vm(vm_alias):
+    cmgr = ClusterManager()
+    vm = get_vm_by_alias(cmgr, vm_alias)
+    vm_info = get_vm_info(vm)
+    header = ['PROPERTY', 'VALUE']
+    table = Table(header=header, data=vm_info.items(), porcelain=True)
+    table.print()
 
 
 @cli.command(
     name='terminate',
     help='Terminate a virtual machine',
 )
-@cli_options.vm_id
-@cli_options.vm_name
+@click.argument('vm_alias')
 @requires_creds
-def terminate_vm(vm_id, vm_name):
-    if vm_id is not None and vm_name is not None:
-        raise UsageError('Provide either VM id or VM name')
-
+def terminate_vm(vm_alias):
     cmgr = ClusterManager()
-    if vm_id is not None:
-        vm = cmgr.get_vm_by_id(vm_id)
-        if vm is None:
-            raise BadParameter('No VM with such id %s' % vm_id)
+    vm = get_vm_by_alias(cmgr, vm_alias)
+    if vm is not None:
+        raise BadParameter('No VM with such id or name %s' % vm_alias)
 
-        info('Terminating VM#%s...' % vm_id)
-        vm.delete()
-        return
-
-    if vm_name is not None:
-        vm = cmgr.get_vm_by_name(vm_name)
-        if vm is None:
-            raise BadParameter('No VM with such name %s' % vm_name)
-
-        info('Terminating VM %s...' % vm_name)
-        vm.delete()
-        return
-
-    raise UsageError('Provide VM identifier to terminate')
+    info('Terminating VM %s...' % vm.name)
+    vm.delete()
 
 
 if __name__ == '__main__':

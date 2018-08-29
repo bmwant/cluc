@@ -46,3 +46,24 @@ def requires_creds(func):
         return func(*args, **kwargs)
 
     return inner
+
+
+def get_vm_by_alias(manager, vm_alias):
+    try:
+        vm_id = int(vm_alias)
+        return manager.get_vm_by_id(vm_id)
+    except ValueError:
+        return manager.get_vm_by_name(vm_alias)
+
+
+def get_vm_info(vm):
+    return {
+        'id': vm.id,
+        'name': vm.name,
+        'uid': vm.uid,
+        'uname': vm.uname,
+        'gid': vm.gid,
+        'gname': vm.gname,
+        'state': vm.str_state,
+        'lcm_state': vm.str_lcm_state,
+    }
