@@ -48,6 +48,7 @@ setup(
         'attrs>=18.1.0',
         'click>=6.7',
         'oca>=4.15.0a1',
+        'PyYAML>=3.13',
         'PyInquirer>=1.0.2',
     ],
 

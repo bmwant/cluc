@@ -4,6 +4,7 @@ oca==4.15.0a1
 prompt-toolkit==1.0.14
 Pygments==2.2.0
 PyInquirer==1.0.2
+PyYAML==3.13
 regex==2018.8.17
 six==1.11.0
 wcwidth==0.1.7

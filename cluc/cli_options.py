@@ -1,4 +1,9 @@
+from functools import lru_cache
+
 import click
+import yaml
+
+from cluc import settings
 
 
 vm_id = click.option(
@@ -19,3 +24,24 @@ show_all = click.option(
     is_flag=True,
     default=False,
 )
+
+
+@lru_cache(maxsize=1)
+def read_config():
+    with open(settings.DEFAULT_CONFIG) as f:
+        return yaml.load(f.read())
+
+
+def get_oses(answers):
+    print(answers)
+    config = read_config()
+    import pdb; pdb.set_trace()
+    print(config)
+
+
+def get_panels(answers):
+    pass
+
+
+def get_panel_versions(answers):
+    pass

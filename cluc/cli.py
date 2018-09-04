@@ -4,6 +4,7 @@ import click
 from click import BadParameter
 
 from cluc import cli_options
+from cluc import settings
 from cluc.cluster import ClusterManager
 from cluc.helpers import info
 from cluc.cli_utils import requires_creds, get_vm_by_alias, get_vm_info
@@ -19,7 +20,7 @@ def cli():
 
 @cli.command(
     name='sync',
-    help='',
+    help='Copy local directory to the remote with a help of rsync',
 )
 @click.option(
     '--src',
@@ -28,13 +29,13 @@ def cli():
 )
 @click.option(
     '--dest',
-    required=True,
+    default=settings.DEFAULT_REMOTE_DIRECTORY,
     help='Location on target machine where to sync source directory',
 )
 def sync_directory(src, dest):
     if src is None:
         src = os.getcwd()
-    rsync_directory(src, '/vagrant/')
+    rsync_directory(src, dest)
 
 
 @cli.command(
@@ -80,15 +81,15 @@ def list_templates(show_all):
 )
 @requires_creds
 def create_vm():
-    # from PyInquirer import prompt, Token, style_from_dict
-    # from cluc.questions import questions_create
-    # answ = prompt(questions_create)
-    # print(answ)
+    from PyInquirer import prompt, Token, style_from_dict
+    from cluc.questions import questions_create
+    answ = prompt(questions_create)
+    print(answ)
 
-    cmgr = ClusterManager()
-    template = cmgr.get_template_by_name('misha-immunify360-cpanel-11.66-cloudlinux-7.4')
-    res = template.instantiate(name='It is my name')
-    print(res)
+    # cmgr = ClusterManager()
+    # template = cmgr.get_template_by_name('misha-immunify360-cpanel-11.66-cloudlinux-7.4')
+    # res = template.instantiate(name='It is my name')
+    # print(res)
 
 
 @cli.command(

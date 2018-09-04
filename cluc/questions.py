@@ -1,5 +1,7 @@
 from PyInquirer import Separator
 
+from cluc.cli_options import get_oses, get_panels, get_panel_versions
+
 
 questions_credentials = [
     {
@@ -28,33 +30,36 @@ questions_create = [
         'type': 'list',
         'name': 'os',
         'message': 'Select operating system to use:',
-        'choices': [
-            'Ubuntu',
-            Separator(),
-            'CentOS 6',
-            'CentOS 7',
-            'CloudLinux',
-        ]
+        'choices': [get_oses],
     },
     {
         'type': 'list',
         'name': 'panel_name',
         'message': 'Choose panel:',
-        'choices': [
-            'CPanel',
-            'Plesk',
-        ]
+        'choices': get_panels,
     },
     {
         'type': 'list',
         'name': 'panel_version',
         'message': 'Choose panel version:',
-        'choices': [
-            '17',
-            '15',
-            '13',
-            '11',
-        ]
+        'choices': get_panel_versions,
     },
-
+    {
+        'type': 'confirm',
+        'name': 'csf_installed',
+        'message': 'Install ConfigServer Firewall?',
+        'default': False,
+    },
+    {
+        'type': 'confirm',
+        'name': 'cwaf_agent_installed',
+        'message': 'Install Comodo Wep Application Firewall?',
+        'default': False,
+    },
+    {
+        'type': 'confirm',
+        'name': 'cxs_installed',
+        'message': 'Install ConfigServer eXploit Scanner?',
+        'default': False,
+    },
 ]

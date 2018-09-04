@@ -1,0 +1,32 @@
+---
+
+os:
+  - name: "Ubuntu 16.04"
+    panels:
+      - "Plesk"
+
+  - name: "CentOS 6.9"
+    panels:
+      - "CPanel"
+
+  - name: "CentOS 7.4"
+    panels:
+      - "DirectAdmin"
+
+  - name: "CloudLinux 7.4"
+    panels:
+      - "CPanel"
+      - "Plesk"
+
+panels:
+  - name: "CPanel"
+    versions:
+      - "11.66"
+
+  - name: "Plesk"
+    versions:
+      - "17"
+
+  - name: "DirectAdmin"
+    versions:
+      - "1.53"
