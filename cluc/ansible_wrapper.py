@@ -59,7 +59,7 @@ play_source_1 = '/home/user/cl/defence360/dev-utils/rpm-test/prepare.yml'
 
 basedir_2 = '/home/user/cl/defence360/dev-utils/ansible'
 extra_vars_2 = {
-    'env': '',
+    'env': 'dev',  # check all envs
     'project_path': '/src',  # root directory for project files
     'deployment_tool': '',  # check key in pb
     'sentry_dsn': '',

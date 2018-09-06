@@ -35,7 +35,9 @@ def cli():
 def sync_directory(src, dest):
     if src is None:
         src = os.getcwd()
-    rsync_directory(src, dest)
+    remote = 'root@192.168.245.9'
+    remote = 'root@192.168.245.45'
+    rsync_directory(src, remote, dest)
 
 
 @cli.command(

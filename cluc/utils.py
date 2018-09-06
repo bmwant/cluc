@@ -55,9 +55,10 @@ def get_excludes(excludes: list) -> list:
     return ['--exclude=%s' % ex for ex in excludes]
 
 
-def rsync_directory(src, dst, *, verbose=True):
+def rsync_directory(src, remote, dst, *, verbose=True):
     source = os.path.join(src, '')  # ensure we copy content of the directory
-    destination = 'root@192.168.245.9:{remote_path}'.format(remote_path=dst)
+    destination = '{remote}:{remote_path}'.format(
+        remote=remote, remote_path=dst)
     cmd = [
         'rsync', '-avrz', '--cvs-exclude',
         *get_excludes(settings.DEFAULT_RSYNC_EXCLUDE),
